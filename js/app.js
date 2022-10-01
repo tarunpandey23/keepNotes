@@ -1,21 +1,46 @@
 console.log("app.js included in html file .");
 displayNotes();
-let btn = document.getElementById("addBtn");
+let addBtn = document.getElementById("addBtn");
+let addHeading=document.getElementById("heading");
+let isChecked=document.getElementById("myCheckBox");
+let bool;
+
 addBtn.addEventListener("click", function (e) {
     let addText = document.getElementById("addTextarea");
-    //this one..
+    let alert=document.getElementsByClassName("alert")[0];
+    if(isChecked.checked==true){
+        bool=true;
+    }
+    else{
+        bool=false;
+    }
+    if(addText.value==""){
+        alert.style.display="block";
+        return false;
+    }else{
+        alert.style.display="none";
+    }
+   //this one..
     let notes = localStorage.getItem("notes");
     if (notes == null) {
         ObjectNotes = [];
-
     } else {
         //this one ...
         ObjectNotes = JSON.parse(notes);
+       
     }
-    ObjectNotes.push(addText.value);
+    let obj={
+        text:addText.value,
+        heading:addHeading.value,
+        check:bool
+    };
+    
+    //ObjectNotes.push(addText.value);
+    ObjectNotes.push(obj);
     //this one ....
     localStorage.setItem("notes", JSON.stringify(ObjectNotes));
     addText.value = "";
+    addHeading.value="";
     console.log(ObjectNotes);
     displayNotes();
 });
@@ -29,36 +54,44 @@ function displayNotes() {
     }
     let html = "";
     ObjectNotes.forEach(function (element, index) {
-        html += `
-        <div class=" notesCard card my-2 mx-2" style="width: 18rem; border-radius: 12px;">
-           <div class="card-body">
-          <h5 class="card-title">Note :${index + 1}</h5>
-          <p class="card-text">${element}</p>
-          <button id=${index} class="btn btn-primary" onclick="deleteNote(this.id)">Delete Note</button>
-        </div>
-      </div>`;
-
+        if(element.check==true){
+            html += `
+            <div class=" notesCard card my-2 mx-2  border-warning mb-3" style="width: 18rem; border-radius: 12px;">
+               <div class="card-body">
+              <h5 class="card-title">${index + 1}:  ${element.heading}</h5>
+              
+              <p class="card-text">${element.text}</p>
+              <button id=${index} class="btn btn-primary" onclick="deleteNote(this.id)">Delete Note</button>
+              </div>
+          </div>`;
+        }else{
+            html += `
+            <div class=" notesCard card my-2 mx-2" style="width: 18rem; border-radius: 12px;">
+               <div class="card-body">
+              <h5 class="card-title">${index + 1}:  ${element.heading}</h5>
+              
+              <p class="card-text">${element.text}</p>
+              <button id=${index} class="btn btn-primary" onclick="deleteNote(this.id)">Delete Note</button>
+              </div>
+          </div>`;
+        }
+       
     })
     let notesElement = document.getElementById("notes");
-    if (notes != null) {
+    if (notes !=null) {
         notesElement.innerHTML = html;
     }
     else {
         notesElement.innerHTML = `Nothing to show here,add your notes from<strong>ADD NOTES</strong> .`;
     }
-    
-
 }
-
-
 //function for delete note ...
-
 function deleteNote(index) {
     console.log("deleting note....");
     let notes = localStorage.getItem("notes");
-    if (notes == null) {
-        ObjectNotes = [];
-    } else {
+    if(notes.length == 0){
+        ObjectNotes=[];
+    }else {
         ObjectNotes = JSON.parse(notes);
     }
     ObjectNotes.forEach(function (index) {
@@ -66,11 +99,8 @@ function deleteNote(index) {
     })
     //this one...
     ObjectNotes.splice(index, 1);
-
     localStorage.setItem("notes", JSON.stringify(ObjectNotes));
     displayNotes();
-
-
 }
 let search = document.getElementById("searchText");
 search.addEventListener("input",function(){
@@ -86,5 +116,4 @@ search.addEventListener("input",function(){
             element.style.display="none";
         }
     })
-
 })
