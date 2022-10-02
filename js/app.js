@@ -20,7 +20,7 @@ addBtn.addEventListener("click", function (e) {
     }else{
         alert.style.display="none";
     }
-   //this one..
+   //?this one..
     let notes = localStorage.getItem("notes");
     if (notes == null) {
         ObjectNotes = [];
@@ -37,14 +37,15 @@ addBtn.addEventListener("click", function (e) {
     
     //ObjectNotes.push(addText.value);
     ObjectNotes.push(obj);
-    //this one ....
+    //?this one ....
     localStorage.setItem("notes", JSON.stringify(ObjectNotes));
     addText.value = "";
     addHeading.value="";
     console.log(ObjectNotes);
     displayNotes();
 });
-//function for display notes...
+//*function for display notes...
+
 function displayNotes() {
     let notes = localStorage.getItem("notes");
     if (notes == null) {
@@ -85,7 +86,8 @@ function displayNotes() {
         notesElement.innerHTML = `Nothing to show here,add your notes from<strong>ADD NOTES</strong> .`;
     }
 }
-//function for delete note ...
+//*function for delete note ...
+
 function deleteNote(index) {
     console.log("deleting note....");
     let notes = localStorage.getItem("notes");
@@ -97,19 +99,22 @@ function deleteNote(index) {
     ObjectNotes.forEach(function (index) {
         localStorage.removeItem(index);
     })
-    //this one...
+    //?this one...
     ObjectNotes.splice(index, 1);
     localStorage.setItem("notes", JSON.stringify(ObjectNotes));
     displayNotes();
 }
+
+//*function for search
+
 let search = document.getElementById("searchText");
 search.addEventListener("input",function(){
     console.log("input event working properly...");
     let inputValue=search.value.toLowerCase();
     let notesCard=document.getElementsByClassName("notesCard");
-    //this one....
+    //?this one....
     Array.from(notesCard).forEach(function(element){
-        let cardTxt=element.getElementsByTagName("p")[0].innerText;
+        let cardTxt=element.getElementsByClassName("card-title")[0].innerText;
         if(cardTxt.includes(inputValue)){
             element.style.display="block";
         }else{
